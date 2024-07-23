@@ -1,35 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import HomeScreen from "./screens/HomeScreen";
-import TaskDetailScreen from "./screens/TaskDetailScreen";
-import LoginScreen from "./screens/LoginScreen";
-import RegisterScreen from "./screens/RegisterScreen";
+const express = require("express");
+const mongoose = require("mongoose");
+const taskRoutes = require("./routes/taskRoutes");
+const authRoutes = require("./routes/authRoutes");
+const app = express();
 
-const Stack = createStackNavigator();
+require("dotenv").config();
 
-const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const PORT = process.env.PORT || 5000;
+const DB_URL = process.env.DB_URL;
 
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = await AsyncStorage.getItem("token");
-      setIsLoggedIn(!!token);
-    };
-    checkToken();
-  }, []);
+mongoose
+  .connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("Database connected"))
+  .catch((error) => console.error(error));
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={isLoggedIn ? "Home" : "Login"}>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="TaskDetail" component={TaskDetailScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
+app.use(express.json());
 
-export default App;
+app.use("/api/tasks", taskRoutes);
+app.use("/api/auth", authRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

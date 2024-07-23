@@ -1,16 +1,21 @@
-const mongoose = require("mongoose");
+const Task = require("../models/taskModel");
 
-const TaskSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "User" },
-  title: { type: String, required: true },
-  description: String,
-  priority: {
-    type: String,
-    enum: ["High", "Medium", "Low"],
-    default: "Medium",
-  },
-  dueDate: Date,
-  completed: { type: Boolean, default: false },
-});
+exports.getTasks = async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    res.json(tasks);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
-module.exports = mongoose.model("Task", TaskSchema);
+exports.createTask = async (req, res) => {
+  const { title, description, dueDate, priority } = req.body;
+  try {
+    const newTask = new Task({ title, description, dueDate, priority });
+    await newTask.save();
+    res.status(201).json(newTask);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
