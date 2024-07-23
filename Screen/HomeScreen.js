@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button, FlatList, StyleSheet } from "react-native";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HomeScreen = ({ navigation }) => {
   const [tasks, setTasks] = useState([]);
@@ -9,9 +10,10 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
+        const token = await AsyncStorage.getItem("token");
         const res = await axios.get("http://localhost:3000/tasks", {
           headers: {
-            "x-auth-token": "your-auth-token-here", // Replace with your actual auth token
+            "x-auth-token": token,
           },
         });
         setTasks(res.data);

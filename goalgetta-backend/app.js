@@ -1,25 +1,35 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-const config = require("./config");
+import React, { useEffect, useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import HomeScreen from "./screens/HomeScreen";
+import TaskDetailScreen from "./screens/TaskDetailScreen";
+import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 
-const app = express();
-app.use(bodyParser.json());
+const Stack = createStackNavigator();
 
-// Connect to the database
-mongoose.connect(config.dbUrl, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-// Routes
-const taskRoutes = require("./routes/tasks");
-const authRoutes = require("./routes/auth");
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem("token");
+      setIsLoggedIn(!!token);
+    };
+    checkToken();
+  }, []);
 
-app.use("/tasks", taskRoutes);
-app.use("/auth", authRoutes);
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName={isLoggedIn ? "Home" : "Login"}>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="TaskDetail" component={TaskDetailScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+export default App;
