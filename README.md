@@ -22,7 +22,7 @@ Back-end routes for tasks (create, list, update, delete) require a JWT token sen
 git clone https://github.com/Kahelm621/GoalGetta.git
 cd GoalGetta/goalgetta-backend
 npm install
-# Create a .env file with DB_URL (MongoDB connection string) and optionally PORT
+# Copy .env.example to .env, then set DB_URL, JWT_SECRET and optionally PORT
 node app.js
 ```
 
