@@ -1,10 +1,10 @@
-// navigation/AppNavigator.js
+// Navigation/AppNavigator.js
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
-import HomeScreen from "../screens/HomeScreen";
-import TaskDetailScreen from "../screens/TaskDetailScreen";
-import LoginScreen from "../screens/LoginScreen";
-import RegisterScreen from "../screens/RegisterScreen";
+import HomeScreen from "../Screen/HomeScreen";
+import TaskDetailScreen from "../Screen/TaskDetailScreen";
+import LoginScreen from "../Screen/LoginScreen";
+import RegisterScreen from "../Screen/RegisterScreen";
 
 const AppNavigator = createStackNavigator(
   {
