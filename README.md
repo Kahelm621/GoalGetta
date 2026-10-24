@@ -29,13 +29,19 @@ node app.js
 ## Project Structure
 ```
 GoalGetta/
+├── Navigation/           # App navigator (stack of screens)
 ├── Screen/               # Home, Login, Register and Task Detail screens
 ├── components/           # Task item, API service and helpers
 └── goalgetta-backend/
     ├── app.js            # Express server
     ├── routes/           # auth and tasks routes
     ├── models/           # Task and User models
-    └── config.js
+    ├── config.js         # Reads DB_URL and JWT_SECRET from .env
+    └── .env.example
 ```
 
 > This is a learning project and a work in progress.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
